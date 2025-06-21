@@ -251,7 +251,9 @@ cli_copydb_getenv(CopyDBOptions *options)
 		{ PGCOPYDB_SKIP_TABLESPACES, ENV_TYPE_BOOL,
 		  &(options->restoreOptions.noTableSpaces) },
 		{ PGCOPYDB_USE_COPY_BINARY, ENV_TYPE_BOOL,
-		  &(options->useCopyBinary) }
+		  &(options->useCopyBinary) },
+		{ PGCOPYDB_NO_COPY_FREEZE, ENV_TYPE_BOOL,
+		  &(options->noCopyFreeze) }
 	};
 
 	int parserCount = sizeof(parsers) / sizeof(parsers[0]);
@@ -619,6 +621,7 @@ cli_copy_db_getopts(int argc, char **argv)
 		{ "skip-split-by-ctid", no_argument, NULL, 'k' },
 		{ "no-tablespaces", no_argument, NULL, 'y' },
 		{ "use-copy-binary", no_argument, NULL, 'n' },
+		{ "no-copy-freeze", no_argument, NULL, 'Z' },
 		{ "filter", required_argument, NULL, 'F' },
 		{ "filters", required_argument, NULL, 'F' },
 		{ "requirements", required_argument, NULL, 'Q' },
@@ -1091,6 +1094,13 @@ cli_copy_db_getopts(int argc, char **argv)
 			{
 				options.useCopyBinary = true;
 				log_trace("--use-copy-binary");
+				break;
+			}
+
+			case 'Z':
+			{
+				options.noCopyFreeze = true;
+				log_trace("--no-copy-freeze");
 				break;
 			}
 

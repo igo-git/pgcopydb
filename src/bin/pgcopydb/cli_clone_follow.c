@@ -66,6 +66,7 @@
 	"  --origin                      Use this Postgres replication origin node name\n" \
 	"  --endpos                      Stop replaying changes when reaching this LSN\n" \
 	"  --use-copy-binary             Use the COPY BINARY format for COPY operations\n" \
+	"  --no-copy-freeze              Don't use FREEZE option for COPY operations\n" \
 
 CommandLine clone_command =
 	make_command(
