@@ -3042,13 +3042,13 @@ pg_copy_end(PGSQL *pgsql)
 static void init_multisegment_insert(PGSQL *pgsql, CopyArgs *args)
 {
 	PQExpBuffer sql = createPQExpBuffer();
-	appendPQExpBuffer(sql, "SET multi_segment_relid TO %s::regclass",
+	appendPQExpBuffer(sql, "SELECT set_config('multi_segment_relid', ('%s'::regclass::oid)::text, false)",
 	                  args->dstQname);
 	log_sql("%s;", sql->data);
 
 	PGresult *res = PQexec(pgsql->connection, sql->data);
 
-	if (PQresultStatus(res) != PGRES_COMMAND_OK)
+	if (PQresultStatus(res) != PGRES_TUPLES_OK)
 	{
 		pgcopy_log_error(pgsql, res, sql->data);
 	}
