@@ -3036,6 +3036,25 @@ pg_copy_end(PGSQL *pgsql)
 	return true;
 }
 
+/*
+* init_multisegment_insert initializes multisegment insert for backend
+*/
+static void init_multisegment_insert(PGSQL *pgsql, CopyArgs *args)
+{
+	PQExpBuffer sql = createPQExpBuffer();
+	appendPQExpBuffer(sql, "SET multi_segment_relid TO %s::regclass",
+	                  args->dstQname);
+	log_sql("%s;", sql->data);
+
+	PGresult *res = PQexec(pgsql->connection, sql->data);
+
+	if (PQresultStatus(res) != PGRES_COMMAND_OK)
+	{
+		pgcopy_log_error(pgsql, res, sql->data);
+	}
+
+	destroyPQExpBuffer(sql);
+}
 
 /*
  * pg_copy_send_query prepares the SQL query that opens a COPY protocol from or
@@ -3072,6 +3091,11 @@ pg_copy_send_query(PGSQL *pgsql, CopyArgs *args, ExecStatusType status)
 	}
 	else if (status == PGRES_COPY_IN)
 	{
+		if (args->useMultisegmentInsert)
+		{
+			init_multisegment_insert(pgsql, args);
+		}
+
 		if (args->dstAttrList != NULL && !streq(args->dstAttrList, ""))
 		{
 			appendPQExpBuffer(sql, "copy %s(%s) from stdin",

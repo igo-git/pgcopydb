@@ -519,6 +519,7 @@ copydb_init_specs(CopyDataSpec *specs,
 		.failFast = options->failFast,
 		.useCopyBinary = options->useCopyBinary,
 		.noCopyFreeze = options->noCopyFreeze,
+		.useMultisegmentInsert = options->useMultisegmentInsert,
 
 		.restart = options->restart,
 		.resume = options->resume,

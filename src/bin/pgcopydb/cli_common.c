@@ -253,7 +253,9 @@ cli_copydb_getenv(CopyDBOptions *options)
 		{ PGCOPYDB_USE_COPY_BINARY, ENV_TYPE_BOOL,
 		  &(options->useCopyBinary) },
 		{ PGCOPYDB_NO_COPY_FREEZE, ENV_TYPE_BOOL,
-		  &(options->noCopyFreeze) }
+		  &(options->noCopyFreeze) },
+		{ PGCOPYDB_USE_MULTISEGMENT_INSERT, ENV_TYPE_BOOL,
+		  &(options->useMultisegmentInsert) }
 	};
 
 	int parserCount = sizeof(parsers) / sizeof(parsers[0]);
@@ -622,6 +624,7 @@ cli_copy_db_getopts(int argc, char **argv)
 		{ "no-tablespaces", no_argument, NULL, 'y' },
 		{ "use-copy-binary", no_argument, NULL, 'n' },
 		{ "no-copy-freeze", no_argument, NULL, 'Z' },
+		{ "use-multisegment-insert", no_argument, NULL, 'Y' },
 		{ "filter", required_argument, NULL, 'F' },
 		{ "filters", required_argument, NULL, 'F' },
 		{ "requirements", required_argument, NULL, 'Q' },
@@ -1103,6 +1106,13 @@ cli_copy_db_getopts(int argc, char **argv)
 				log_trace("--no-copy-freeze");
 				break;
 			}
+
+			case 'Y':
+			{
+				options.useMultisegmentInsert = true;
+				log_trace("--use-multisegment-insert");
+				break;
+			}			
 
 			case '?':
 			default:

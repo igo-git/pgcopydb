@@ -73,6 +73,7 @@ typedef struct CopyDBOptions
 	bool failFast;
 	bool useCopyBinary;
 	bool noCopyFreeze;
+	bool useMultisegmentInsert;
 
 	bool restart;
 	bool resume;
