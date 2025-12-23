@@ -28,6 +28,7 @@ lib*dll.def
 lib*.pc
 
 # Local excludes in root directory
+./vscode/
 /config.log
 /config.status
 /pgsql.sln
