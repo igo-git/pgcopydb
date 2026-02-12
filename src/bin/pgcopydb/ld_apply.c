@@ -49,7 +49,7 @@ static bool readTxnCommitLSN(LogicalMessageMetadata *metadata, const char *dir,
 							 bool *txnCommitLSNFound);
 static bool parseTxnMetadataFile(const char *filename, LogicalMessageMetadata *metadata);
 
-static bool computeTxnMetadataFilename(uint32_t xid, const char *dir, char *filename);
+static bool computeTxnMetadataFilename(uint64_t xid, const char *dir, char *filename);
 
 static bool writeTxnCommitMetadata(LogicalMessageMetadata *mesg, const char *dir);
 
@@ -1711,7 +1711,7 @@ static bool
 parseTxnMetadataFile(const char *filename, LogicalMessageMetadata *metadata)
 {
 	/* store xid as it will be overwritten while parsing metadata */
-	uint32_t xid = metadata->xid;
+	uint64_t xid = metadata->xid;
 
 	if (xid == 0)
 	{
@@ -1756,7 +1756,7 @@ parseTxnMetadataFile(const char *filename, LogicalMessageMetadata *metadata)
  *  based on its transaction id
  */
 static bool
-computeTxnMetadataFilename(uint32_t xid, const char *dir, char *filename)
+computeTxnMetadataFilename(uint64_t xid, const char *dir, char *filename)
 {
 	if (dir == NULL)
 	{

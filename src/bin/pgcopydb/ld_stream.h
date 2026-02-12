@@ -77,7 +77,7 @@ typedef struct LogicalMessageMetadata
 	/* from parsing the message itself */
 	StreamAction action;
 	uint32_t hash;              /* PREPARE/EXECUTE statement name is a hash */
-	uint32_t xid;
+	uint64_t xid;
 	uint64_t lsn;
 	uint64_t txnCommitLSN;      /* COMMIT LSN of the transaction */
 	char timestamp[PG_MAX_TIMESTAMP];
@@ -221,7 +221,7 @@ typedef struct LogicalTransactionStatement
 
 typedef struct LogicalTransaction
 {
-	uint32_t xid;
+	uint64_t xid;
 	uint64_t beginLSN;
 	uint64_t commitLSN;
 	uint64_t rollbackLSN;
