@@ -31,6 +31,7 @@
 #include "pg_utils.h"
 #include "signals.h"
 #include "string_utils.h"
+#include "copydb.h"
 
 #if defined(LIBPQ_HAS_PIPELINING) && LIBPQ_HAS_PIPELINING
 #define pqPipelineModeEnabled(conn) (PQpipelineStatus(conn) == PQ_PIPELINE_ON)
