@@ -3675,6 +3675,23 @@ pgsql_create_logical_replication_slot(LogicalStreamClient *client,
 		return false;
 	}
 
+	/* also set our GUC values for the source connection */
+	if (!pgsql_server_version(pgsql))
+	{
+		/* errors have already been logged */
+		return false;
+	}
+
+	GUC *settings =
+		pgsql->pgversion_num < 90600 ? srcSettings95 : srcSettings;
+
+	if (!pgsql_set_gucs(pgsql, settings))
+	{
+		log_fatal("Failed to set our GUC settings on the source connection, "
+				  "see above for details");
+		return false;
+	}
+
 	PGresult *result = PQexec(pgsql->connection, query);
 
 	if (PQresultStatus(result) != PGRES_TUPLES_OK)
