@@ -2911,7 +2911,7 @@ catalog_iter_s_table_init(SourceTableIterator *iter)
 		"    from s_table t "
 		"         left join s_table_part p on p.oid = t.oid "
 		"         left join s_table_chksum c on c.oid = t.oid "
-		"         left join summary s on s.tableoid = t.oid "
+		"         left join summary s on s.tableoid = t.oid and s.partnum = coalesce(p.partnum, 0) "
 		"         left join s_table_size ts on ts.oid = t.oid "
 		"group by t.oid "
 		"order by ts.bytes desc";
