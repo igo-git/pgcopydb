@@ -830,11 +830,6 @@ parseNextColumn(TestDecodingColumns *cols,
 
 	sformat(typname, sizeof(typname), "%.*s", typLen, typStart);
 
-	if (streq(typname, "text"))
-	{
-		cols->oid = TEXTOID;
-	}
-
 	cols->colnameStart = ptr;
 	cols->colnameLen = typA - ptr;
 
@@ -852,6 +847,8 @@ parseNextColumn(TestDecodingColumns *cols,
 	 */
 	if (*ptr == '\'')
 	{
+		/* this column haves escaped string value */
+		cols->oid = TEXTOID;
 		/* skip the opening single-quote now */
 		char *cur = ptr + 1;
 
