@@ -847,7 +847,7 @@ parseNextColumn(TestDecodingColumns *cols,
 	 */
 	if (*ptr == '\'')
 	{
-		/* this column haves escaped string value */
+		/* this column has escaped string value */
 		cols->oid = TEXTOID;
 		/* skip the opening single-quote now */
 		char *cur = ptr + 1;
@@ -1037,6 +1037,7 @@ listToTuple(LogicalMessageTuple *tuple, TestDecodingColumns *cols, int count)
 				return false;
 			}
 
+			int vlen = 0;
 			/* copy the string contents without the surrounding quotes */
 			for (int pidx = 0, vidx = 0; pidx < cur->valueLen; pidx++)
 			{
@@ -1044,13 +1045,18 @@ listToTuple(LogicalMessageTuple *tuple, TestDecodingColumns *cols, int count)
 				char *nxt = cur->valueStart + pidx + 1;
 
 				/* unescape the single-quotes */
-				if (*ptr == '\'' && *nxt == '\'')
+				if (*ptr == '\'' && *nxt == '\'' && pidx < cur->valueLen - 1)
 				{
 					continue;
 				}
 
 				valueColumn->val.str[vidx++] = *ptr;
-			}
+				vlen++;
+			}	
+
+			log_trace("listToTuple: unescaped value: %.*s",
+					vlen,
+					valueColumn->val.str);
 		}
 		else
 		{
