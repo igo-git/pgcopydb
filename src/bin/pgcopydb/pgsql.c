@@ -3919,7 +3919,8 @@ OutputPluginToString(StreamOutputPlugin plugin)
  */
 bool
 pgsql_create_logical_replication_slot(LogicalStreamClient *client,
-									  ReplicationSlot *slot)
+									  ReplicationSlot *slot,
+                                      GUC *settings)
 {
 	PGSQL *pgsql = &(client->pgsql);
 
@@ -3941,6 +3942,14 @@ pgsql_create_logical_replication_slot(LogicalStreamClient *client,
 	if (!pgsql_identify_system(pgsql, &(client->system), client->cdcPathDir))
 	{
 		/* errors have already been logged */
+		return false;
+	}
+
+	/* also set our GUC values for the source connection */
+	if (!pgsql_set_gucs(pgsql, settings))
+	{
+		log_fatal("Failed to set our GUC settings on the source connection, "
+				  "see above for details");
 		return false;
 	}
 
