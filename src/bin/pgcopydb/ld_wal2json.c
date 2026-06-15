@@ -98,7 +98,7 @@ parseWal2jsonMessageActionAndXid(LogicalStreamContext *context)
 	if (json_object_has_value(jsobj, "xid"))
 	{
 		double xid = json_object_get_number(jsobj, "xid");
-		metadata->xid = (uint32_t) xid;
+		metadata->xid = (uint64_t) xid;
 	}
 
 

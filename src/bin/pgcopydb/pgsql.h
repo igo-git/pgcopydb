@@ -334,6 +334,7 @@ typedef struct CopyArgs
 	bool truncate;
 	bool freeze;
 	bool useCopyBinary;
+	bool useMultisegmentInsert;
 } CopyArgs;
 
 

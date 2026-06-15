@@ -1727,7 +1727,7 @@ parseMessageMetadata(LogicalMessageMetadata *metadata,
 	{
 		const char *xid = json_object_get_string(jsobj, "xid");
 
-		if (!stringToUInt32(xid, &(metadata->xid)))
+		if (!stringToUInt64(xid, &(metadata->xid)))
 		{
 			log_error("Failed to parse XID \"%s\" in message: %s", xid, buffer);
 			return false;
@@ -1736,7 +1736,7 @@ parseMessageMetadata(LogicalMessageMetadata *metadata,
 	else if (json_object_has_value_of_type(jsobj, "xid", JSONNumber))
 	{
 		double xid = json_object_get_number(jsobj, "xid");
-		metadata->xid = (uint32_t) xid;
+		metadata->xid = (uint64_t) xid;
 	}
 	else
 	{

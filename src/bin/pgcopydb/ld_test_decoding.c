@@ -149,7 +149,7 @@ parseTestDecodingMessageActionAndXid(LogicalStreamContext *context)
 
 		int s = strlen("BEGIN ");
 
-		if (!stringToUInt32(begin + s, &(metadata->xid)))
+		if (!stringToUInt64(begin + s, &(metadata->xid)))
 		{
 			log_error("Failed to parse XID \"%s\"", begin + s);
 			return false;
@@ -171,7 +171,7 @@ parseTestDecodingMessageActionAndXid(LogicalStreamContext *context)
 
 		int s = strlen("COMMIT ");
 
-		if (!stringToUInt32(commit + s, &(metadata->xid)))
+		if (!stringToUInt64(commit + s, &(metadata->xid)))
 		{
 			log_error("Failed to parse XID \"%s\"", commit + s);
 			return false;
